@@ -1,12 +1,31 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import HomePage from './components/HomePage';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import QuizMaster from './components/QuizMaster';
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+          <Route
+            path="/quiz-master"
+            element={<QuizMaster />}
+          />
+          <Route
+            path="/participant"
+            element={<HomePage />}
+          />
+        </Routes>
+      </Router>
+    </>
+
   );
 }
 
