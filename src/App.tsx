@@ -4,6 +4,7 @@ import './App.css';
 import HomePage from './components/HomePage';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import QuizMaster from './components/QuizMaster';
+import Participant from './components/ParticipantPage';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           />
           <Route
             path="/participant"
-            element={<HomePage />}
+            element={<Participant />}
           />
         </Routes>
       </Router>
