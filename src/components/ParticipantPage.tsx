@@ -4,13 +4,31 @@ import { useNavigate } from 'react-router-dom';
 function ParticipantPage() {
   const [roomId, setRoomId] = useState('');
   const [name, setName] = useState('');
+  const [errors, setErrors] = useState({ roomId: '', name: '' });
   const navigate = useNavigate();
 
+  function validateForm() {
+    const newErrors = { roomId: '', name: '' };
+
+    if (!roomId.trim()) {
+      newErrors.roomId = 'Room ID is required';
+    }
+    if (!name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    setErrors(newErrors);
+    return !newErrors.roomId && !newErrors.name;
+  }
+
   function handleJoin() {
-    if (roomId.trim() && name.trim()) {
+    if (validateForm()) {
+      // Store roomId and name in session storage
+      sessionStorage.setItem('roomId', roomId);
+      sessionStorage.setItem('name', name);
+
+      // Navigate to the quiz page
       navigate(`/quiz/${roomId}`);
-    } else {
-      alert("Please enter both Room ID and Name");
     }
   }
 
@@ -32,8 +50,9 @@ function ParticipantPage() {
             value={roomId}
             onChange={(e) => setRoomId(e.target.value)}
             placeholder="Enter Room ID"
-            className="border-2 border-gray-300 p-4 rounded-lg w-full"
+            className={`border-2 p-4 rounded-lg w-full ${errors.roomId ? 'border-red-500' : 'border-gray-300'}`}
           />
+          {errors.roomId && <p className="text-red-500 text-sm mt-1">{errors.roomId}</p>}
         </div>
         <div className="w-64">
           <label className="block text-gray-700 font-semibold mb-2">Your Name</label>
@@ -42,13 +61,17 @@ function ParticipantPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter Your Name"
-            className="border-2 border-gray-300 p-4 rounded-lg w-full"
+            className={`border-2 p-4 rounded-lg w-full ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
           />
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
       </div>
       <button
-        className="bg-indigo-500 text-white px-8 py-3 rounded-lg hover:bg-indigo-600 transition duration-300"
+        className={`bg-indigo-500 text-white px-8 py-3 rounded-lg transition duration-300 ${
+          !roomId || !name ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'
+        }`}
         onClick={handleJoin}
+        disabled={!roomId || !name}
       >
         Join Room
       </button>
